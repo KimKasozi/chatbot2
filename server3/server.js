@@ -35,7 +35,7 @@ try {
   const message = summarizedText.summary;
   const text1 =JSON.stringify(message)
   console.log(text1)
-  res.status(200).send(response.data);
+  res.status(200).send({message: "Let's have that for today!!"});
 } catch (error) {
 	console.error(error);
 }

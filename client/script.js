@@ -148,7 +148,7 @@ const translation = await axios.post('http://localhost:8080', {
         const data = await response.json();
         const parseData = data.bot.trim();
         //sending bots reply to text summarizer 
-         const summarized = await axios.post('https://chatbotserver2.onrender.com', {
+         const summarized = await axios.post('https://chatbotserver3.onrender.com', {
            text: parseData
          })  
    .then(response => {
@@ -170,7 +170,7 @@ const translation = await axios.post('http://localhost:8080', {
    });
 //end of the sending to summarizer
         //sending bots reply from sunbird for interpretation
-        const botsReply = await axios.post('http://localhost:8080', {
+        const botsReply = await axios.post('https://chatbotserver2.onrender.com/', {
   text: summarized,
   src_lang:'English',
   tgt_lang: SL
