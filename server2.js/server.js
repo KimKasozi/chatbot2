@@ -5,6 +5,9 @@ import axios from 'axios';
 
 
 dotenv.config();
+
+const access_token = process.env.SUNBIRD_API_TOKEN;
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -16,7 +19,6 @@ app.get('/', async (req, res) => {
 });
 
 const url = 'https://sunbird-ai-api-5bq6okiwgq-ew.a.run.app';
-const access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJLaW1LYXNvemkxIiwiZXhwIjo0ODQxMzAwNzMzfQ.oZnRumUwDVi6kYvokKWqDgMGe6tq3Pfz58w3sykmo2E';
 app.post('/', async(req, res) =>{
     try{
         const text =req.body.text;  

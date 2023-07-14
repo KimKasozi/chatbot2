@@ -1,0 +1,41 @@
+import fetch from 'node-fetch';
+
+// Set the API endpoint URL
+const url = "https://api.openweathermap.org/data/2.5/weather";
+
+// Set your API key
+const api_key = "0844d799d178edb5e79b933e5fab9f4d";
+
+// Set the desired parameters
+const latitude = 51.5074; // Example latitude (London)
+const longitude = -0.1278; // Example longitude (London)
+const units = "metric"; // Change to "imperial" for Fahrenheit
+
+// Create the query parameters
+const params = new URLSearchParams({
+  lat: latitude,
+  lon: longitude,
+  units: units,
+  appid: api_key
+});
+
+// Construct the complete URL with query parameters
+const requestUrl = `${url}?${params.toString()}`;
+
+// Send the HTTP GET request
+fetch(requestUrl)
+  .then(response => response.json())
+  .then(data => {
+    // Extract the required information from the response
+    const temperature = data.main.temp;
+    const humidity = data.main.humidity;
+    const weather_description = data.weather[0].description;
+
+    // Print the results
+    console.log(`Temperature: ${temperature}°C`);
+    console.log(`Humidity: ${humidity}%`);
+    console.log(`Weather: ${weather_description}`);
+  })
+  .catch(error => {
+    console.log("Error occurred while retrieving weather data.", error);
+  });

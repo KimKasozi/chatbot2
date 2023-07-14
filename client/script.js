@@ -3,9 +3,9 @@ import user from './assets/user.svg'
 import axios from 'axios';
 
 let mess="";
+let mess2="";
 let SL="Luganda";
 const audioChunks = [];
-
 
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
@@ -93,6 +93,9 @@ const handleSubmit = async(e) => {
     e.preventDefault()
     const data = new FormData(form);
     const userPrompt = data.get('prompt');
+    // user's chat Stripe
+    chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
+    form.reset();
     // const data2 = new FormData(form);
     // const languageObtained = data2.get('lang');
     // console.log(languageObtained);
@@ -119,9 +122,7 @@ const translation = await axios.post('http://localhost:8080', {
     console.error('Error:', error);
   });
 //end of the sending
-    // user's chat Stripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
-    form.reset();
+    
     // bot's chat Stripe
     const uniqueId = generateUniqueId();
     chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
@@ -146,9 +147,31 @@ const translation = await axios.post('http://localhost:8080', {
     if (response.ok){
         const data = await response.json();
         const parseData = data.bot.trim();
+        //sending bots reply to text summarizer 
+         const summarized = await axios.post('http://localhost:8060', {
+           text: parseData
+         })  
+   .then(response => {
+     if (response.status === 200) {
+       const data = response.data;
+       const message = data.summary;
+       const summarizedText =JSON.stringify(message)
+       //mess2 = summarizedText;
+       // Use the translated text as needed in your script
+       console.log(message)
+       return message;
+      
+     } else {
+       throw new Error(`Error: ${response.status} ${response.statusText}`);
+     }
+   })
+   .catch(error => {
+     console.error('Error:', error);
+   });
+//end of the sending to summarizer
         //sending bots reply from sunbird for interpretation
         const botsReply = await axios.post('http://localhost:8080', {
-  text: parseData,
+  text: summarized,
   src_lang:'English',
   tgt_lang: SL
 })
@@ -168,7 +191,8 @@ const translation = await axios.post('http://localhost:8080', {
   });
 //end of the sending
         typeText(messageDiv, botsReply);
-        console.log("Bot's English Reply: ", parseData);        
+        console.log("Bot's English Reply: ", parseData);
+        console.log("Bot's Summarized English Reply: ", summarized);         
         console.log("SunBd's Local version: ", mess);
     }else{
         const err = await response.text();
@@ -264,4 +288,3 @@ mediaRecorder.addEventListener('stop', () => {
   //       to the user's default download folder.
 });
 }*/
-

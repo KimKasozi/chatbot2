@@ -11,6 +11,8 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+let context="";
+
 const app = express();
 app.use(cors());
 app.use(express.json())
@@ -24,9 +26,11 @@ app.get('/', async(req, res) =>{
 app.post('/', async(req, res) =>{
     try{
         const prompt = req.body.prompt;
+        // Concatenate the prompt and context
+        const inputText = context + prompt;
         const response = await openai.createCompletion({
             model:"text-davinci-003",
-            prompt: `${prompt}`,
+            prompt: inputText,
             temperature:0,
             max_tokens:3000,
             top_p:1,
@@ -34,9 +38,15 @@ app.post('/', async(req, res) =>{
             presence_penalty:0
         });
 
-        res.status(200).send({
-            bot: response.data.choices[0].text
-        })
+        // Extract the generated response
+    const botResponse = response.data.choices[0].text;
+
+    // Update the context by appending the prompt and response
+    context += prompt + botResponse;
+
+    res.status(200).send({
+      bot: botResponse,
+    })
     }catch(error){
         console.log(error);
         res.status(500).send(error)

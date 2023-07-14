@@ -1,0 +1,56 @@
+import express from 'express';
+import * as dotenv from 'dotenv';
+import cors from 'cors';
+import axios from 'axios';
+// import * as Location from 'expo-location';
+
+
+dotenv.config();
+
+let lat = 33.44;
+let lon = -94.04;
+
+// async () => {
+//     let {status} = await Location.requestForegroundPermissionsAsync();
+//     if(status !== 'granted'){
+//         console.log('Permission to access location denied')
+//         return
+//     }else{
+//         console.log('Permission granted');
+//         let location = await Location.getCurrentPositionAsync({});
+//         console.log('Current position: ', location);
+//     }
+// }
+
+const access_token = "0844d799d178edb5e79b933e5fab9f4d";
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get('/', async (req, res) => {
+  res.status(200).send({
+    message: "Let's have that for today!!"
+  });
+});
+
+app.post('/', async(req, res) =>{
+    try{
+        console.log("happy");
+        const response = await axios.post(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lat=${lon}&appid=${access_token}`);
+    
+        if (response.status === 200) {
+          const info = response.json;
+          console.log("happy");
+          res.status(200).send({ info });
+        } else {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        } catch (error) {
+          console.log("happy");
+          console.error('Error:', error);
+          res.status(500).send({ error: error.message });
+        }
+      });
+
+app.listen(3002, () => console.log('Server is running on port http://localhost:3002'));
