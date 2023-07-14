@@ -148,7 +148,7 @@ const translation = await axios.post('http://localhost:8080', {
         const data = await response.json();
         const parseData = data.bot.trim();
         //sending bots reply to text summarizer 
-         const summarized = await axios.post('http://localhost:8060', {
+         const summarized = await axios.post('https://chatbotserver2.onrender.com', {
            text: parseData
          })  
    .then(response => {

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 dotenv.config();
 
-//const access_token = process.env.SUNBIRD_API_TOKEN;
+const access_token = process.env.SUMMARY_API_TOKEN;
 console.log("yes");
 const app = express();
 app.use(cors());
@@ -19,7 +19,7 @@ const options = {
   url: 'https://gpt-summarization.p.rapidapi.com/summarize',
   headers: {
     'content-type': 'application/json',
-    'X-RapidAPI-Key': '69eedcbee7mshe55ea5943af3182p12e636jsn7669ed8a049a',
+    'X-RapidAPI-Key': SUMMARY_API_TOKEN,
     'X-RapidAPI-Host': 'gpt-summarization.p.rapidapi.com'
   },
   data: {
