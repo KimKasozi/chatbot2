@@ -40,3 +40,5 @@ function translateText(prompt) {
 export default translateText;
 
 // translateText('Let us go back home.');
+
+// djfkjdjfjdk
