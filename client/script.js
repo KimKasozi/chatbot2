@@ -131,7 +131,7 @@ const translation = await axios.post('http://localhost:8080', {
     const messageDiv = document.getElementById(uniqueId);
     loader(messageDiv);
     // Obtaining a response from the bot ---> fetching data from the server
-    const response = await fetch("http://localhost:5000", {
+    const response = await fetch("https://chatbot2-2dna.onrender.com/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
